@@ -1,12 +1,14 @@
-import User from "../models/user.model.js";
+import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary from "../utils/cloudinary.js"; 
 import getDataUri from "../utils/datauri.js";
 
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    console.log(req.body);
+    
     if (!username || !email || !password) {
       return res
         .status(401)
@@ -86,7 +88,7 @@ export const logout = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await User.findById(userId);
+    let user = await User.findById(userId).select("-password");
     return res.status(200).json({ user, success: true });
   } catch (error) {
     console.log(error);
@@ -104,7 +106,7 @@ export const editProfile = async (req, res) => {
       const fileUri = getDataUri(profilePicture);
       cloudResponse = await cloudinary.uploader.upload(fileUri);
     }
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       return res
         .status(404)
