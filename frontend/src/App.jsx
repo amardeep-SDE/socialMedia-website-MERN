@@ -1,11 +1,8 @@
-import { Toaster } from "sonner";
-import "./App.css";
-import Signup from "./components/Signup";
-import { createBrowserRouter,RouterProvider } from "react-router-dom";
+import Home from "./components/Home";
 import Login from "./components/Login";
 import MainLayout from "./components/MainLayout";
-import { Home } from "lucide-react";
-import Profile from "./components/Profile";
+import Signup from "./components/Signup";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const browserRouter = createBrowserRouter([
   {
@@ -16,11 +13,7 @@ const browserRouter = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      {
-        path: "/profile",
-        element: <Profile />,
-      }
-    ]
+    ],
   },
   {
     path: "/login",
@@ -29,14 +22,13 @@ const browserRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
-  }
-])
+  },
+]);
 
 function App() {
   return (
     <>
-      <RouterProvider router = {browserRouter}/>
-      <Toaster/>
+      <RouterProvider router={browserRouter} />
     </>
   );
 }

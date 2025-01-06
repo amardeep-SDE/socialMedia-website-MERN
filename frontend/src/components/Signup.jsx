@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import{  useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import axios from 'axios';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 const Signup = () => {
     const [input, setInput] = useState({
@@ -31,7 +31,6 @@ const Signup = () => {
             });
             if (res.data.success) {
                 navigate("/login");
-
                 toast.success(res.data.message);
                 setInput({
                     username: "",
