@@ -11,17 +11,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import store from "@/redux/store";
+import { setAuthUser } from "@/redux/authSlice";
+import { useState } from "react";
+import CreatePost from "./CreatePost";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
-
+  const { user } = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const logoutHandler = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/user/logout",
-        { withCredentials: true }
-      );
+      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
+        withCredentials: true,
+      });
       if (res.data.success) {
+        dispatch(setAuthUser(null));
         navigate("/login");
         toast.success(res.data.message);
       }
@@ -31,10 +38,19 @@ const LeftSidebar = () => {
   };
 
   const sidebarHandler = (textType) => {
-    if (textType === "Logout") {
-      logoutHandler();
+    if (textType === 'Logout') {
+        logoutHandler();
+    } else if (textType === "Create") {
+        setOpen(true);
+    } else if (textType === "Profile") {
+        navigate(`/profile/${user?._id}`);
+    } else if (textType === "Home") {
+        navigate("/");
+    } else if (textType === 'Messages') {
+        navigate("/chat");
     }
-  };
+}
+
 
   const sidebarItems = [
     { icon: <Home />, text: "Home" },
@@ -46,7 +62,7 @@ const LeftSidebar = () => {
     {
       icon: (
         <Avatar className="w-6 h-6">
-          <AvatarImage src="" alt="@shadcn" />
+          <AvatarImage src={user?.profilePicture} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       ),
@@ -73,6 +89,7 @@ const LeftSidebar = () => {
           })}
         </div>
       </div>
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 };
