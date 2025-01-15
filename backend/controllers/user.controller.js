@@ -66,17 +66,12 @@ export const login = async (req, res) => {
     const populatedPosts = await Promise.all(
       user.posts.map(async (postId) => {
         const post = await Post.findById(postId);
-        if (post && post.author.equals(user._id)) {
-          // Validate post and author
+        if (post.author.equals(user._id)) {
           return post;
         }
         return null;
       })
     );
-
-    // Filter out null values from the populatedPosts array
-    const validPosts = populatedPosts.filter((post) => post !== null);
-
     user = {
       _id: user._id,
       username: user.username,
@@ -85,9 +80,8 @@ export const login = async (req, res) => {
       bio: user.bio,
       followers: user.followers,
       following: user.following,
-      posts: validPosts,
+      posts: populatedPosts,
     };
-
     return res
       .cookie("token", token, {
         httpOnly: true,

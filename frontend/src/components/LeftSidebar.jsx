@@ -12,7 +12,6 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import store from "@/redux/store";
 import { setAuthUser } from "@/redux/authSlice";
 import { useState } from "react";
 import CreatePost from "./CreatePost";
